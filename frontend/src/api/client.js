@@ -1,5 +1,6 @@
 // REC-ONE Backend API Client
-const API_BASE = 'http://localhost:3002/api/v1'
+// Prefer environment variable (set via Vite) or fallback to default backend port
+const API_BASE = import.meta.env.VITE_API_BASE || 'http://localhost:3002/api/v1'
 
 class APIClient {
   constructor() {

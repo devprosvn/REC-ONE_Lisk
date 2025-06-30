@@ -774,7 +774,7 @@ async function createOffer() {
             sellerWallet: userAddress,
             quantity: quantity,
             pricePerKWhETH: ethers.formatEther(price),
-            pricePerKWhVND: suggestion.vnd,
+            pricePerKWhVND: convertETHtoVND(offerPriceInput.value),
             txHash: receipt.hash,
             blockNumber: receipt.blockNumber
           })
