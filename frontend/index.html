@@ -1,0 +1,218 @@
+<!doctype html>
+<html lang="en">
+  <head>
+    <meta charset="UTF-8" />
+    <link rel="icon" type="image/svg+xml" href="/vite.svg" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>REC-ONE P2P Energy Trading</title>
+    <link rel="stylesheet" href="src/chain-selector.css">
+    <link rel="stylesheet" href="src/auth-modals.css">
+  </head>
+  <body>
+    <div id="app">
+      <header class="header">
+        <div class="header-content">
+          <div class="header-title">
+            <h1>🔋 REC-ONE Energy Market</h1>
+            <p>P2P Energy Trading - Multi-Chain Platform</p>
+          </div>
+          <div class="header-user">
+            <div id="user-info"></div>
+            <div id="auth-buttons"></div>
+          </div>
+        </div>
+      </header>
+
+      <main class="main">
+        <!-- Wallet Connection Section -->
+        <section class="wallet-section">
+          <div class="card">
+            <h2>💼 Wallet Connection</h2>
+            <div id="wallet-info" class="wallet-info">
+              <button id="connect-wallet" class="btn btn-primary">Connect MetaMask</button>
+              <button id="my-offers-btn" class="btn btn-secondary" disabled>📋 Manage Offers</button>
+            </div>
+          </div>
+        </section>
+
+        <!-- Account Info Section -->
+        <section class="account-section">
+          <div class="card">
+            <h2>📊 Account Overview</h2>
+            <div class="account-grid">
+              <div class="account-item">
+                <span class="label">Address:</span>
+                <span id="user-address" class="value clickable" onclick="copyAddress()" title="Click to copy full address">Not connected</span>
+              </div>
+              <div class="account-item">
+                <span class="label">LSK Balance:</span>
+                <span id="lsk-balance" class="value">0 ETH</span>
+              </div>
+              <div class="account-item">
+                <span class="label">Energy Balance:</span>
+                <span id="energy-balance" class="value">0 kWh</span>
+              </div>
+              <div class="account-item">
+                <span class="label">Available to Sell:</span>
+                <span id="available-energy" class="value">0 kWh</span>
+              </div>
+              <div class="account-item">
+                <span class="label">Contract Status:</span>
+                <span id="contract-status" class="value">Not connected</span>
+                <button id="check-contract" class="btn btn-small" style="margin-left: 10px; display: none;">Check</button>
+              </div>
+            </div>
+          </div>
+        </section>
+
+        <!-- Energy Generation Section -->
+        <section class="generation-section">
+          <div class="card">
+            <h2>⚡ Energy Generation</h2>
+            <p>Simulate your solar panel energy production</p>
+            <div class="input-group">
+              <input type="number" id="energy-amount" placeholder="Enter kWh amount" min="1" step="1">
+              <button id="generate-energy" class="btn btn-success">Generate Energy</button>
+            </div>
+          </div>
+        </section>
+
+        <!-- Vietnam Electricity Tariff Reference -->
+        <section class="tariff-section">
+          <div class="card">
+            <h2>📊 Vietnam Electricity Tariff (EVN)</h2>
+            <div class="tariff-table">
+              <div class="tariff-row tariff-header">
+                <span>Tier</span>
+                <span>Usage Range</span>
+                <span>Price per kWh</span>
+              </div>
+              <div class="tariff-row">
+                <span>Tier 1</span>
+                <span>0 - 50 kWh</span>
+                <span>1,984 VND</span>
+              </div>
+              <div class="tariff-row">
+                <span>Tier 2</span>
+                <span>51 - 100 kWh</span>
+                <span>2,050 VND</span>
+              </div>
+              <div class="tariff-row">
+                <span>Tier 3</span>
+                <span>101 - 200 kWh</span>
+                <span>2,380 VND</span>
+              </div>
+              <div class="tariff-row">
+                <span>Tier 4</span>
+                <span>201 - 300 kWh</span>
+                <span>2,998 VND</span>
+              </div>
+              <div class="tariff-row">
+                <span>Tier 5</span>
+                <span>301 - 400 kWh</span>
+                <span>3,350 VND</span>
+              </div>
+              <div class="tariff-row">
+                <span>Tier 6</span>
+                <span>401+ kWh</span>
+                <span>3,460 VND</span>
+              </div>
+            </div>
+            <p style="font-size: 0.9rem; color: #666; margin-top: 1rem;">
+              💡 <strong>Note:</strong> P2P trading prices are suggested based on this tariff with a 5% margin for fair trading.
+            </p>
+          </div>
+        </section>
+
+        <!-- Energy Marketplace Section -->
+        <section class="marketplace-section">
+          <div class="card">
+            <h2>🏪 Energy Marketplace</h2>
+
+            <!-- Create Offer -->
+            <div class="create-offer">
+              <h3>🏪 Sell Your Energy</h3>
+
+              <!-- Energy Balance Info -->
+              <div class="energy-balance-header">
+                <h4>Your Energy Balance</h4>
+                <button id="refresh-balance" class="btn btn-small">🔄 Refresh Balance</button>
+              </div>
+              <div class="energy-balance-info">
+                <div class="balance-item">
+                  <span class="label">Total Generated:</span>
+                  <span id="total-generated" class="value">0 kWh</span>
+                </div>
+                <div class="balance-item">
+                  <span class="label">Total Sold:</span>
+                  <span id="total-sold" class="value">0 kWh</span>
+                </div>
+                <div class="balance-item">
+                  <span class="label">Pending Offers:</span>
+                  <span id="pending-offers" class="value">0 kWh</span>
+                </div>
+                <div class="balance-item highlight">
+                  <span class="label">Available to Sell:</span>
+                  <span id="max-can-sell" class="value">0 kWh</span>
+                </div>
+              </div>
+
+              <div class="pricing-info">
+                <p><strong>💡 Vietnam Electricity Pricing Reference:</strong></p>
+                <div class="tariff-display" id="tariff-display">
+                  <small>Enter quantity to see suggested pricing based on EVN tariff</small>
+                </div>
+              </div>
+              <div class="offer-form">
+                <div class="quantity-input-group">
+                  <input type="number" id="offer-quantity" placeholder="Quantity (kWh)" min="1" step="1">
+                  <small class="input-hint">Maximum: <span id="max-quantity-hint">0</span> kWh</small>
+                </div>
+                <div class="price-input-group">
+                  <input type="number" id="offer-price" placeholder="Price per kWh (ETH)" min="0.000001" step="0.000001">
+                  <button type="button" id="suggest-price" class="btn btn-secondary">💡 Suggest Price</button>
+                </div>
+                <div class="price-display" id="price-display"></div>
+                <div id="offer-validation" class="offer-validation" style="display: none;"></div>
+                <button id="create-offer" class="btn btn-primary">Create Offer</button>
+              </div>
+            </div>
+
+            <!-- Active Offers -->
+            <div class="offers-list">
+              <div class="offers-header">
+                <h3>Available Energy Offers</h3>
+                <div class="offers-controls">
+                  <button id="refresh-offers" class="btn btn-small">🔄 Refresh</button>
+                  <span id="last-updated" class="last-updated">Loading...</span>
+                </div>
+              </div>
+              <div id="offers-container" class="offers-container">
+                <p class="no-offers">Loading marketplace offers...</p>
+              </div>
+            </div>
+          </div>
+        </section>
+      </main>
+
+      <!-- Loading Overlay -->
+      <div id="loading-overlay" class="loading-overlay hidden">
+        <div class="loading-spinner">
+          <div class="spinner"></div>
+          <p id="loading-text">Processing...</p>
+        </div>
+      </div>
+
+      <!-- Status Messages -->
+      <div id="status-messages" class="status-messages"></div>
+    </div>
+
+    <link rel="stylesheet" href="/src/energy-style.css">
+    <link rel="stylesheet" href="/src/offer-management.css">
+    <script type="module" src="/src/chain-selector.ts"></script>
+    <script type="module" src="/src/user-profile.ts"></script>
+    <script type="module" src="/src/auth-modals.ts"></script>
+    <script type="module" src="/src/energy-app.ts"></script>
+    <script type="module" src="/src/offer-management.ts"></script>
+  </body>
+</html>

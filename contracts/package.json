@@ -1,0 +1,28 @@
+{
+  "name": "rec-one-contracts",
+  "version": "1.0.0",
+  "description": "Smart contracts for REC-ONE multi-chain energy trading platform",
+  "scripts": {
+    "compile": "hardhat compile",
+    "test": "hardhat test",
+    "deploy:lisk": "hardhat run scripts/deploy.ts --network liskSepolia",
+    "deploy:saga": "hardhat run scripts/deploy-saga.ts --network sagaChainlet",
+    "deploy:bsc": "hardhat run scripts/deploy-bsc.ts --network bscTestnet",
+    "deploy:all": "hardhat run scripts/deploy-multichain.ts",
+    "verify:lisk": "hardhat verify --network liskSepolia",
+    "verify:saga": "hardhat verify --network sagaChainlet",
+    "verify:bsc": "hardhat verify --network bscTestnet",
+    "clean": "hardhat clean",
+    "node": "hardhat node"
+  },
+  "devDependencies": {
+    "@nomicfoundation/hardhat-ethers": "^3.0.9",
+    "@nomicfoundation/hardhat-toolbox-viem": "^4.0.0",
+    "@nomicfoundation/hardhat-verify": "^2.0.14",
+    "ethers": "^6.14.4",
+    "hardhat": "^2.25.0"
+  },
+  "dependencies": {
+    "dotenv": "^17.0.0"
+  }
+}
