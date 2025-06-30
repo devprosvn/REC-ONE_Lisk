@@ -1,0 +1,104 @@
+# Dependencies
+node_modules/
+npm-debug.log*
+yarn-debug.log*
+yarn-error.log*
+pnpm-debug.log*
+
+# Environment variables
+.env
+.env.local
+.env.development.local
+.env.test.local
+.env.production.local
+
+# Hardhat files
+cache/
+artifacts/
+typechain/
+typechain-types/
+
+# Hardhat network files
+deployments/localhost/
+deployments/hardhat/
+
+# Coverage reports
+coverage/
+coverage.json
+*.lcov
+
+# Hardhat Ignition default folder for deployments against a local node
+ignition/deployments/chain-31337
+
+# Logs
+logs/
+*.log
+
+# Gas reports
+gas-report.txt
+.gas-snapshot
+
+# Security analysis
+slither.db.json
+mythril-analysis/
+echidna-corpus/
+
+# Foundry
+out/
+cache_forge/
+broadcast/
+lib/
+
+# IDE files
+.vscode/
+.idea/
+*.swp
+*.swo
+
+# OS generated files
+.DS_Store
+Thumbs.db
+
+# Private keys (NEVER commit!)
+*.key
+*.pem
+private-keys.txt
+mnemonic.txt
+seed.txt
+
+# Build outputs
+build/
+dist/
+
+# Temporary files
+tmp/
+temp/
+*.tmp
+
+# Local development
+.local
+.cache
+
+# Blockchain data
+geth/
+data/
+keystore/
+
+# Flattened contracts
+flattened/
+flat/
+
+# Contract verification
+verify/
+verification/
+
+# Local config overrides
+hardhat.config.local.js
+truffle-config.local.js
+
+# Tenderly
+.tenderly/
+
+# Backup files
+*.bak
+*.backup
