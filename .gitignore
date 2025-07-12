@@ -1,0 +1,349 @@
+# ===================================
+# REC-ONE Project Root .gitignore
+# ===================================
+
+# Dependencies (all subprojects)
+node_modules/
+npm-debug.log*
+yarn-debug.log*
+yarn-error.log*
+pnpm-debug.log*
+lerna-debug.log*
+
+# Environment variables (all subprojects)
+.env
+.env.local
+.env.development.local
+.env.test.local
+.env.production.local
+**/.env
+**/.env.local
+**/.env.development.local
+**/.env.test.local
+**/.env.production.local
+
+# Build outputs (all subprojects)
+dist/
+build/
+out/
+**/dist/
+**/build/
+**/out/
+
+# ===================================
+# Backend specific
+# ===================================
+backend/node_modules/
+backend/logs/
+backend/uploads/
+backend/storage/
+backend/.cache/
+backend/tmp/
+backend/temp/
+backend/*.db
+backend/*.sqlite
+backend/*.sqlite3
+
+# ===================================
+# Frontend specific
+# ===================================
+frontend/node_modules/
+frontend/dist/
+frontend/dist-ssr/
+frontend/.vite/
+frontend/coverage/
+frontend/test-results/
+frontend/playwright-report/
+frontend/cypress/videos/
+frontend/cypress/screenshots/
+
+# ===================================
+# Contracts specific
+# ===================================
+contracts/node_modules/
+contracts/cache/
+contracts/artifacts/
+contracts/typechain/
+contracts/typechain-types/
+contracts/coverage/
+contracts/gas-report.txt
+contracts/out/
+contracts/broadcast/
+contracts/lib/
+
+# ===================================
+# Logs (project-wide)
+# ===================================
+logs/
+*.log
+npm-debug.log*
+yarn-debug.log*
+yarn-error.log*
+lerna-debug.log*
+.pnpm-debug.log*
+
+# ===================================
+# Cache directories
+# ===================================
+.cache/
+.npm/
+.yarn/
+.pnp.*
+.eslintcache/
+.stylelintcache/
+.parcel-cache/
+.nyc_output/
+
+# ===================================
+# TypeScript
+# ===================================
+*.tsbuildinfo
+**/typechain/
+**/typechain-types/
+
+# ===================================
+# Testing & Coverage
+# ===================================
+coverage/
+*.lcov
+test-results/
+playwright-report/
+playwright/.cache/
+cypress/videos/
+cypress/screenshots/
+cypress/downloads/
+.nyc_output/
+
+# ===================================
+# IDE files
+# ===================================
+.vscode/
+!.vscode/extensions.json
+!.vscode/settings.json
+.idea/
+*.swp
+*.swo
+*~
+*.suo
+*.ntvs*
+*.njsproj
+*.sln
+*.sw?
+
+# ===================================
+# OS generated files
+# ===================================
+.DS_Store
+.DS_Store?
+._*
+.Spotlight-V100
+.Trashes
+ehthumbs.db
+Thumbs.db
+desktop.ini
+
+# ===================================
+# Security & Sensitive files
+# ===================================
+# Private keys (NEVER commit!)
+*.key
+*.pem
+private-keys.txt
+mnemonic.txt
+seed.txt
+wallet.json
+keystore/
+
+# API keys and secrets
+secrets.json
+config/secrets.js
+.secrets
+
+# Certificate files
+*.crt
+*.cert
+*.p12
+*.pfx
+
+# ===================================
+# Temporary files
+# ===================================
+tmp/
+temp/
+*.tmp
+*.temp
+*.bak
+*.backup
+*~
+
+# ===================================
+# Documentation & Reports
+# ===================================
+docs/generated/
+reports/
+audit-reports/
+security-reports/
+gas-reports/
+coverage-reports/
+
+# ===================================
+# Deployment & Production
+# ===================================
+# Deployment scripts with sensitive data
+deploy-config.json
+production-config.js
+
+# Docker (if not needed in repo)
+# docker-compose.override.yml
+# Dockerfile.local
+
+# Kubernetes secrets
+# k8s-secrets.yaml
+
+# ===================================
+# Package managers
+# ===================================
+package-lock.json.bak
+yarn.lock.bak
+.yarn/cache/
+.yarn/unplugged/
+.yarn/build-state.yml
+.yarn/install-state.gz
+
+# ===================================
+# Development tools
+# ===================================
+# Local development overrides
+*.local.js
+*.local.ts
+*.local.json
+config.local.*
+
+# Debugging
+.vscode/launch.json
+.vscode/tasks.json
+
+# Profiling
+*.prof
+*.cpuprofile
+*.heapprofile
+
+# ===================================
+# Blockchain specific
+# ===================================
+# Local blockchain data
+geth/
+data/
+chaindata/
+
+# Hardhat network files
+deployments/localhost/
+deployments/hardhat/
+ignition/deployments/chain-31337/
+
+# Gas optimization
+.gas-snapshot
+gas-report.txt
+
+# Contract verification
+verify/
+verification/
+flattened/
+
+# ===================================
+# CI/CD
+# ===================================
+# GitHub Actions (keep workflows but ignore outputs)
+.github/workflows/outputs/
+
+# Local CI scripts
+ci-local/
+scripts/local/
+
+# ===================================
+# Monitoring & Analytics
+# ===================================
+.lighthouse/
+lighthouse-report.html
+bundle-analyzer-report.html
+stats.json
+.sentry/
+.analytics/
+
+# ===================================
+# Custom project files
+# ===================================
+# Project documentation drafts
+docs/drafts/
+notes/
+TODO.md
+NOTES.md
+
+# Local scripts
+scripts/local/
+tools/local/
+
+# Test data
+test-data/
+mock-data/
+fixtures/local/
+
+# Uploads and user content
+uploads/
+storage/
+public/uploads/
+assets/uploads/
+
+# ===================================
+# Archive files
+# ===================================
+*.zip
+*.tar
+*.tar.gz
+*.rar
+*.7z
+
+# ===================================
+# Backup files
+# ===================================
+*.orig
+*.rej
+*~
+.#*
+#*#
+
+# ===================================
+# Local configuration
+# ===================================
+.local/
+local.config.js
+local.config.json
+config/local/
+
+# ===================================
+# Performance & Optimization
+# ===================================
+.webpack/
+.rollup.cache/
+.turbo/
+.next/
+.nuxt/
+.svelte-kit/
+
+# ===================================
+# Mobile development (if applicable)
+# ===================================
+.expo/
+.capacitor/
+.cordova/
+.ionic/
+
+# ===================================
+# Database files
+# ===================================
+*.db
+*.sqlite
+*.sqlite3
+*.db-journal
+database.json
+db.json

@@ -1,0 +1,156 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>MetaMask Connection Speed Test</title>
+    <style>
+        body {
+            font-family: Arial, sans-serif;
+            max-width: 600px;
+            margin: 50px auto;
+            padding: 20px;
+            background: linear-gradient(135deg, #ffffff 0%, #e3f2fd 100%);
+        }
+        .test-container {
+            background: white;
+            padding: 30px;
+            border-radius: 12px;
+            box-shadow: 0 4px 20px rgba(33, 150, 243, 0.15);
+        }
+        button {
+            background: linear-gradient(135deg, #2196f3, #64b5f6);
+            color: white;
+            border: none;
+            padding: 12px 24px;
+            border-radius: 8px;
+            font-size: 16px;
+            cursor: pointer;
+            margin: 10px 5px;
+        }
+        button:hover {
+            transform: translateY(-2px);
+        }
+        .result {
+            margin: 15px 0;
+            padding: 10px;
+            border-radius: 6px;
+            font-weight: bold;
+        }
+        .success { background: #e8f5e8; color: #2e7d32; }
+        .error { background: #ffebee; color: #c62828; }
+        .timing { background: #e3f2fd; color: #1565c0; }
+    </style>
+</head>
+<body>
+    <div class="test-container">
+        <h1>🚀 MetaMask Connection Speed Test</h1>
+        <p>This test measures how fast MetaMask connection opens.</p>
+        
+        <button onclick="testConnectionSpeed()">🔌 Test Connection Speed</button>
+        <button onclick="testBasicDetection()">🔍 Test MetaMask Detection</button>
+        <button onclick="clearResults()">🗑️ Clear Results</button>
+        
+        <div id="results"></div>
+    </div>
+
+    <script>
+        let startTime;
+        
+        function addResult(message, type = 'timing') {
+            const results = document.getElementById('results');
+            const div = document.createElement('div');
+            div.className = `result ${type}`;
+            div.innerHTML = `${new Date().toLocaleTimeString()}: ${message}`;
+            results.appendChild(div);
+            results.scrollTop = results.scrollHeight;
+        }
+        
+        function clearResults() {
+            document.getElementById('results').innerHTML = '';
+        }
+        
+        async function testBasicDetection() {
+            const start = performance.now();
+            
+            if (typeof window.ethereum === 'undefined') {
+                addResult('❌ MetaMask not detected', 'error');
+                return;
+            }
+            
+            const detectionTime = performance.now() - start;
+            addResult(`✅ MetaMask detected in ${detectionTime.toFixed(2)}ms`, 'success');
+            
+            if (window.ethereum.isMetaMask) {
+                addResult('✅ Confirmed MetaMask provider', 'success');
+            } else {
+                addResult('⚠️ Ethereum provider found but not MetaMask', 'error');
+            }
+        }
+        
+        async function testConnectionSpeed() {
+            if (!window.ethereum) {
+                addResult('❌ MetaMask not installed', 'error');
+                return;
+            }
+            
+            addResult('🚀 Starting connection test...');
+            startTime = performance.now();
+            
+            try {
+                // Test 1: Check existing accounts (should be instant)
+                const existingAccounts = await window.ethereum.request({ 
+                    method: 'eth_accounts' 
+                });
+                const checkTime = performance.now() - startTime;
+                addResult(`📋 Account check: ${checkTime.toFixed(2)}ms`);
+                
+                if (existingAccounts.length > 0) {
+                    addResult(`✅ Already connected: ${existingAccounts[0]}`, 'success');
+                    return;
+                }
+                
+                // Test 2: Request connection (this should open MetaMask popup)
+                addResult('🔐 Requesting account access...');
+                const requestStart = performance.now();
+                
+                const accounts = await window.ethereum.request({ 
+                    method: 'eth_requestAccounts' 
+                });
+                
+                const requestTime = performance.now() - requestStart;
+                const totalTime = performance.now() - startTime;
+                
+                addResult(`⚡ Popup opened in: ${requestTime.toFixed(2)}ms`, 'timing');
+                addResult(`🎉 Total connection time: ${totalTime.toFixed(2)}ms`, 'success');
+                addResult(`✅ Connected: ${accounts[0]}`, 'success');
+                
+                // Performance analysis
+                if (requestTime < 1000) {
+                    addResult('🚀 Excellent speed!', 'success');
+                } else if (requestTime < 3000) {
+                    addResult('👍 Good speed', 'success');
+                } else {
+                    addResult('⚠️ Slow connection - check browser/extension', 'error');
+                }
+                
+            } catch (error) {
+                const errorTime = performance.now() - startTime;
+                addResult(`❌ Error after ${errorTime.toFixed(2)}ms: ${error.message}`, 'error');
+                
+                if (error.code === 4001) {
+                    addResult('👤 User rejected connection', 'error');
+                } else if (error.code === -32002) {
+                    addResult('⏳ Connection already pending', 'error');
+                }
+            }
+        }
+        
+        // Auto-test on load
+        window.addEventListener('load', () => {
+            addResult('🌐 Page loaded, ready for testing');
+            testBasicDetection();
+        });
+    </script>
+</body>
+</html>

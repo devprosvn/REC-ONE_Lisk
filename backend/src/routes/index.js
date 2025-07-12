@@ -1,5 +1,6 @@
 import express from 'express'
 import userRoutes from './userRoutes.js'
+import profileRoutes from './profileRoutes.js'
 import energyRoutes from './energyRoutes.js'
 import transactionRoutes from './transactionRoutes.js'
 import statsRoutes from './statsRoutes.js'
@@ -19,6 +20,7 @@ export const setupRoutes = (app) => {
       description: 'Backend API for REC-ONE blockchain energy trading platform',
       endpoints: {
         users: `/api/${API_VERSION}/users`,
+        profiles: `/api/${API_VERSION}/profiles`,
         energy: `/api/${API_VERSION}/energy`,
         transactions: `/api/${API_VERSION}/transactions`,
         stats: `/api/${API_VERSION}/stats`,
@@ -36,6 +38,7 @@ export const setupRoutes = (app) => {
 
   // Mount route modules
   router.use('/users', userRoutes)
+  router.use('/profiles', profileRoutes)
   router.use('/energy', energyRoutes)
   router.use('/transactions', transactionRoutes)
   router.use('/stats', statsRoutes)

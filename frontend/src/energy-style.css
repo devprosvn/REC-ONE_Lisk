@@ -45,25 +45,12 @@ body {
 .header {
   background: var(--secondary-gradient);
   padding: 2rem 1rem;
+  text-align: center;
   box-shadow: var(--shadow-light);
   border-bottom: 1px solid var(--border-color);
 }
 
-.header-content {
-  display: flex;
-  justify-content: space-between;
-  align-items: center;
-  gap: 20px;
-  max-width: 1200px;
-  margin: 0 auto;
-}
-
-.header-title {
-  flex: 1;
-  text-align: left;
-}
-
-.header-title h1 {
+.header h1 {
   font-size: 2.5rem;
   font-weight: 700;
   color: var(--text-secondary);
@@ -71,17 +58,10 @@ body {
   text-shadow: 0 2px 4px rgba(33, 150, 243, 0.1);
 }
 
-.header-title p {
+.header p {
   font-size: 1.1rem;
   color: var(--text-primary);
   opacity: 0.8;
-}
-
-.header-user {
-  display: flex;
-  flex-direction: column;
-  align-items: flex-end;
-  gap: 10px;
 }
 
 /* Main Content */
@@ -618,23 +598,8 @@ input[type="number"]:focus, input[type="text"]:focus {
 
 /* Responsive Design */
 @media (max-width: 768px) {
-  .header-content {
-    flex-direction: column;
-    text-align: center;
-    gap: 15px;
-  }
-
-  .header-title {
-    text-align: center;
-  }
-
-  .header-title h1 {
+  .header h1 {
     font-size: 2rem;
-  }
-
-  .header-user {
-    align-items: center;
-    width: 100%;
   }
   
   .main {
@@ -662,4 +627,183 @@ input[type="number"]:focus, input[type="text"]:focus {
     flex-direction: column;
     gap: 0.5rem;
   }
+}
+
+/* User Profile Styles */
+.user-profile-display {
+  margin: 10px 0;
+  padding: 10px;
+  background: linear-gradient(135deg, #f8f9ff 0%, #e8f2ff 100%);
+  border-radius: 8px;
+  border: 1px solid #e0e7ff;
+}
+
+.user-profile-card {
+  display: flex;
+  align-items: center;
+  gap: 12px;
+}
+
+.user-avatar {
+  width: 40px;
+  height: 40px;
+  border-radius: 50%;
+  object-fit: cover;
+  border: 2px solid #3b82f6;
+}
+
+.user-info h3 {
+  margin: 0 0 4px 0;
+  font-size: 16px;
+  color: #1e40af;
+  font-weight: 600;
+}
+
+.wallet-address {
+  margin: 0 0 4px 0;
+  font-size: 12px;
+  color: #6b7280;
+  font-family: 'Courier New', monospace;
+}
+
+.no-wallet {
+  margin: 0 0 4px 0;
+  font-size: 12px;
+  color: #ef4444;
+  font-style: italic;
+}
+
+.verified-badge {
+  display: inline-block;
+  font-size: 10px;
+  background: #10b981;
+  color: white;
+  padding: 2px 6px;
+  border-radius: 10px;
+  margin-right: 8px;
+}
+
+.reputation {
+  margin: 0;
+  font-size: 12px;
+  color: #f59e0b;
+}
+
+.user-profile-placeholder {
+  text-align: center;
+  color: #6b7280;
+  font-style: italic;
+}
+
+.user-profile-placeholder small {
+  display: block;
+  font-size: 11px;
+  margin-top: 4px;
+}
+
+/* Modal Styles */
+.modal {
+  position: fixed;
+  z-index: 1000;
+  left: 0;
+  top: 0;
+  width: 100%;
+  height: 100%;
+  background-color: rgba(0, 0, 0, 0.5);
+  backdrop-filter: blur(4px);
+}
+
+.modal-content {
+  background-color: white;
+  margin: 5% auto;
+  padding: 30px;
+  border-radius: 12px;
+  width: 90%;
+  max-width: 500px;
+  max-height: 80vh;
+  overflow-y: auto;
+  box-shadow: 0 20px 25px -5px rgba(0, 0, 0, 0.1), 0 10px 10px -5px rgba(0, 0, 0, 0.04);
+}
+
+.close-modal {
+  color: #9ca3af;
+  float: right;
+  font-size: 28px;
+  font-weight: bold;
+  cursor: pointer;
+  line-height: 1;
+}
+
+.close-modal:hover {
+  color: #374151;
+}
+
+/* Auth Tabs */
+.auth-tabs {
+  display: flex;
+  margin-bottom: 20px;
+  border-bottom: 1px solid #e5e7eb;
+}
+
+.tab-button {
+  flex: 1;
+  padding: 12px 16px;
+  background: none;
+  border: none;
+  cursor: pointer;
+  font-size: 14px;
+  font-weight: 500;
+  color: #6b7280;
+  border-bottom: 2px solid transparent;
+  transition: all 0.2s;
+}
+
+.tab-button.active {
+  color: #3b82f6;
+  border-bottom-color: #3b82f6;
+}
+
+.tab-button:hover {
+  color: #1e40af;
+}
+
+.tab-content {
+  display: none;
+}
+
+.tab-content.active {
+  display: block;
+}
+
+/* Auth Status */
+.auth-status {
+  margin-top: 16px;
+  padding: 10px 12px;
+  border-radius: 6px;
+  font-size: 14px;
+  font-weight: 500;
+}
+
+.auth-status.success {
+  background: #d1fae5;
+  border: 1px solid #10b981;
+  color: #065f46;
+}
+
+.auth-status.error {
+  background: #fef2f2;
+  border: 1px solid #ef4444;
+  color: #991b1b;
+}
+
+.auth-status.warning {
+  background: #fef3c7;
+  border: 1px solid #f59e0b;
+  color: #92400e;
+}
+
+.auth-status.info {
+  background: #dbeafe;
+  border: 1px solid #3b82f6;
+  color: #1e40af;
 }

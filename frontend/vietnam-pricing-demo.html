@@ -1,0 +1,283 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Vietnam Electricity Pricing Demo</title>
+    <style>
+        body {
+            font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+            max-width: 800px;
+            margin: 20px auto;
+            padding: 20px;
+            background: linear-gradient(135deg, #ffffff 0%, #e3f2fd 100%);
+        }
+        .demo-container {
+            background: white;
+            padding: 30px;
+            border-radius: 12px;
+            box-shadow: 0 4px 20px rgba(33, 150, 243, 0.15);
+        }
+        .input-group {
+            margin: 20px 0;
+        }
+        input {
+            padding: 10px;
+            border: 2px solid #e3f2fd;
+            border-radius: 6px;
+            font-size: 16px;
+            width: 200px;
+        }
+        button {
+            background: linear-gradient(135deg, #2196f3, #64b5f6);
+            color: white;
+            border: none;
+            padding: 10px 20px;
+            border-radius: 6px;
+            font-size: 16px;
+            cursor: pointer;
+            margin-left: 10px;
+        }
+        .result {
+            background: #f8f9fa;
+            border: 1px solid #dee2e6;
+            border-radius: 6px;
+            padding: 20px;
+            margin: 20px 0;
+        }
+        .tariff-table {
+            width: 100%;
+            border-collapse: collapse;
+            margin: 20px 0;
+        }
+        .tariff-table th, .tariff-table td {
+            border: 1px solid #ddd;
+            padding: 12px;
+            text-align: left;
+        }
+        .tariff-table th {
+            background: #e3f2fd;
+            font-weight: 600;
+        }
+        .breakdown {
+            background: #e8f5e8;
+            padding: 15px;
+            border-radius: 6px;
+            margin: 10px 0;
+        }
+        .total {
+            background: #fff3cd;
+            padding: 15px;
+            border-radius: 6px;
+            font-weight: bold;
+            font-size: 18px;
+        }
+    </style>
+</head>
+<body>
+    <div class="demo-container">
+        <h1>🇻🇳 Vietnam Electricity Pricing Calculator</h1>
+        <p>Test the EVN tariff calculation system used in REC-ONE P2P Energy Trading</p>
+
+        <div class="input-group">
+            <label for="kwh-input">Enter kWh consumption:</label><br>
+            <input type="number" id="kwh-input" placeholder="e.g., 150" min="1" step="1">
+            <button onclick="calculatePrice()">Calculate Price</button>
+            <button onclick="showExamples()">Show Examples</button>
+        </div>
+
+        <div id="results"></div>
+
+        <h2>📊 EVN Electricity Tariff Structure</h2>
+        <table class="tariff-table">
+            <thead>
+                <tr>
+                    <th>Tier</th>
+                    <th>Usage Range</th>
+                    <th>Price per kWh</th>
+                    <th>Description</th>
+                </tr>
+            </thead>
+            <tbody>
+                <tr>
+                    <td>Bậc 1</td>
+                    <td>0 - 50 kWh</td>
+                    <td>1,984 VND</td>
+                    <td>Basic consumption</td>
+                </tr>
+                <tr>
+                    <td>Bậc 2</td>
+                    <td>51 - 100 kWh</td>
+                    <td>2,050 VND</td>
+                    <td>Low consumption</td>
+                </tr>
+                <tr>
+                    <td>Bậc 3</td>
+                    <td>101 - 200 kWh</td>
+                    <td>2,380 VND</td>
+                    <td>Medium consumption</td>
+                </tr>
+                <tr>
+                    <td>Bậc 4</td>
+                    <td>201 - 300 kWh</td>
+                    <td>2,998 VND</td>
+                    <td>High consumption</td>
+                </tr>
+                <tr>
+                    <td>Bậc 5</td>
+                    <td>301 - 400 kWh</td>
+                    <td>3,350 VND</td>
+                    <td>Very high consumption</td>
+                </tr>
+                <tr>
+                    <td>Bậc 6</td>
+                    <td>401+ kWh</td>
+                    <td>3,460 VND</td>
+                    <td>Maximum tier</td>
+                </tr>
+            </tbody>
+        </table>
+    </div>
+
+    <script>
+        // Vietnam Electricity Tariff
+        const VN_ELECTRICITY_TARIFF = [
+            { min: 0, max: 50, price: 1984, tier: 'Tier 1' },
+            { min: 51, max: 100, price: 2050, tier: 'Tier 2' },
+            { min: 101, max: 200, price: 2380, tier: 'Tier 3' },
+            { min: 201, max: 300, price: 2998, tier: 'Tier 4' },
+            { min: 301, max: 400, price: 3350, tier: 'Tier 5' },
+            { min: 401, max: Infinity, price: 3460, tier: 'Tier 6' }
+        ];
+
+        const EXCHANGE_RATES = {
+            VND_TO_USD: 24000,
+            ETH_TO_USD: 2000
+        };
+
+        function formatVND(amount) {
+            return new Intl.NumberFormat('vi-VN', {
+                style: 'currency',
+                currency: 'VND',
+                minimumFractionDigits: 0
+            }).format(amount);
+        }
+
+        function calculateVNElectricityPrice(kWh) {
+            let totalVND = 0;
+            let remainingKWh = kWh;
+            const breakdown = [];
+
+            for (const tier of VN_ELECTRICITY_TARIFF) {
+                if (remainingKWh <= 0) break;
+
+                const tierMin = tier.min;
+                const tierMax = tier.max === Infinity ? remainingKWh + tierMin - 1 : tier.max;
+                const tierKWh = Math.min(remainingKWh, tierMax - tierMin + 1);
+                
+                if (tierKWh > 0) {
+                    const tierCost = tierKWh * tier.price;
+                    totalVND += tierCost;
+                    
+                    breakdown.push({
+                        tier: tier.tier,
+                        range: tier.max === Infinity ? `${tierMin}+ kWh` : `${tierMin}-${tierMax} kWh`,
+                        kWh: tierKWh,
+                        pricePerKWh: tier.price,
+                        totalCost: tierCost
+                    });
+                    
+                    remainingKWh -= tierKWh;
+                }
+            }
+
+            return { totalVND, breakdown };
+        }
+
+        function convertVNDtoETH(vndAmount) {
+            const usdAmount = vndAmount / EXCHANGE_RATES.VND_TO_USD;
+            const ethAmount = usdAmount / EXCHANGE_RATES.ETH_TO_USD;
+            return ethAmount.toFixed(6);
+        }
+
+        function calculatePrice() {
+            const kWh = parseInt(document.getElementById('kwh-input').value);
+            
+            if (!kWh || kWh <= 0) {
+                alert('Please enter a valid kWh amount');
+                return;
+            }
+
+            const { totalVND, breakdown } = calculateVNElectricityPrice(kWh);
+            const averagePrice = totalVND / kWh;
+            const p2pPrice = Math.round(averagePrice * 1.05);
+            const ethPrice = convertVNDtoETH(p2pPrice);
+
+            let html = `
+                <div class="result">
+                    <h3>💡 Calculation Results for ${kWh} kWh</h3>
+                    
+                    <div class="breakdown">
+                        <h4>📊 EVN Tariff Breakdown:</h4>
+            `;
+
+            breakdown.forEach(tier => {
+                html += `
+                    <div style="margin: 5px 0;">
+                        <strong>${tier.tier}</strong> (${tier.range}): 
+                        ${tier.kWh} kWh × ${tier.pricePerKWh.toLocaleString('vi-VN')} VND = 
+                        <strong>${formatVND(tier.totalCost)}</strong>
+                    </div>
+                `;
+            });
+
+            html += `
+                    </div>
+                    
+                    <div class="total">
+                        <div>💰 Total EVN Cost: <strong>${formatVND(totalVND)}</strong></div>
+                        <div>📈 Average Price: <strong>${formatVND(averagePrice)}</strong> per kWh</div>
+                        <div>🔄 P2P Trading Price (+5%): <strong>${formatVND(p2pPrice)}</strong> per kWh</div>
+                        <div>⚡ ETH Equivalent: <strong>${ethPrice} ETH</strong> per kWh</div>
+                        <div>💵 Total P2P Value: <strong>${formatVND(p2pPrice * kWh)}</strong> (${(parseFloat(ethPrice) * kWh).toFixed(6)} ETH)</div>
+                    </div>
+                </div>
+            `;
+
+            document.getElementById('results').innerHTML = html;
+        }
+
+        function showExamples() {
+            const examples = [25, 75, 150, 250, 350, 450];
+            let html = '<div class="result"><h3>📋 Common Usage Examples</h3>';
+
+            examples.forEach(kWh => {
+                const { totalVND } = calculateVNElectricityPrice(kWh);
+                const averagePrice = totalVND / kWh;
+                const p2pPrice = Math.round(averagePrice * 1.05);
+                const ethPrice = convertVNDtoETH(p2pPrice);
+
+                html += `
+                    <div style="border: 1px solid #ddd; padding: 10px; margin: 10px 0; border-radius: 6px;">
+                        <strong>${kWh} kWh:</strong> 
+                        ${formatVND(totalVND)} 
+                        (Avg: ${formatVND(averagePrice)}/kWh, 
+                        P2P: ${formatVND(p2pPrice)}/kWh, 
+                        ETH: ${ethPrice}/kWh)
+                    </div>
+                `;
+            });
+
+            html += '</div>';
+            document.getElementById('results').innerHTML = html;
+        }
+
+        // Auto-calculate on input change
+        document.getElementById('kwh-input').addEventListener('input', function() {
+            if (this.value && parseInt(this.value) > 0) {
+                calculatePrice();
+            }
+        });
+    </script>
+</body>
+</html>

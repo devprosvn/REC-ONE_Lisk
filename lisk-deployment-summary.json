@@ -1,0 +1,17 @@
+{
+  "timestamp": "2025-07-01T05:03:25.591Z",
+  "network": "Lisk Sepolia",
+  "contractAddress": "0xcca6F4EA7e82941535485C2363575404C3061CD2",
+  "status": "success",
+  "urls": {
+    "frontend": "http://localhost:5173",
+    "backend": "http://localhost:3002",
+    "explorer": "https://sepolia-blockscout.lisk.com/address/0xcca6F4EA7e82941535485C2363575404C3061CD2"
+  },
+  "nextSteps": [
+    "Open http://localhost:5173 in your browser",
+    "Connect your MetaMask wallet",
+    "Switch to Lisk Sepolia network",
+    "Test energy marketplace functions"
+  ]
+}
